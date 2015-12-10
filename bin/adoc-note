@@ -5,37 +5,55 @@
 
 ### CONFIGURATION SECTION START
 
-LaunchViewer () {
-	# Note: we need & in this function!
+LaunchLinuxViewer () {
+	# WARNING: if the environment variable ADOC_VIEWER is defined
+	# the following code is never executed!
+	
+	# Note: we need & at the end of the line!
 	# Uncomment one line only!
-
 	# Chromium Asciidoctor-plugin follows your changes without "reload".
-	chromium "file:///$1" &
+	#chromium "file:///$1" &
 	# Alternative: 
 	#chrome "file:///$1" &
 	# Extra package needed for this example: apt-get install uni2ascii
 	#chromium "--app=file:$(echo "$1"|uni2ascii -aJ)" &
 	# Press "reload current page" in firefox to see your changes.
-	#firefox  "file:///$1" &
+	firefox  "file:///$1" &
 }
 
-LaunchEditor () {
+LaunchLinuxEditor () {
+	# WARNING: if the environment variable ADOC_EDITOR is defined
+	# the following code is never executed!
+
 	# Note there is no & in this function. The editor should not fork!
 	# Uncomment one line only!
 
 	# Very simple Linux editor.
 	leafpad "$1"
-	# Under Windows try this first:
-	#notepad "$1"
 	# Linux geany. Optional: enable autosave in geany's save plugin.
 	#geany "$1" 
-	# Alternatively launch gvim this way under Linux and Windows.
+	# Alternatively run gvim.
 	#gvim --nofork "$1" 
-	# Does --nofork work under windows?
-	#gVimPortable --nofork "$1"
 }
 
 ### CONFIGURATION SECTION END
+
+
+LaunchViewer () {
+	if [ -n "$ADOC_VIEWER" ]; then
+		"$ADOC_VIEWER" "$ADOC_VIEWER_OPT$1" & 
+	else
+		LaunchLinuxViewer "$1"
+	fi
+}
+
+LaunchEditor () {
+	if [ -n "$ADOC_EDITOR" ]; then
+		"$ADOC_EDITOR" "$1"  
+	else
+		LaunchLinuxEditor "$1"
+	fi
+}
 
 
 

@@ -1,7 +1,7 @@
 
 = Note taking with Asciidoctor
 Jens Getreu
-v2.0, 9.12.2015
+v2.1, 10.12.2015
 :numbered:
 :toc:
 :pagenums:
@@ -106,6 +106,7 @@ There are several ways to launch `adoc-note`.
 
 Linux::
 * Launch the commands in shell as described the sections _Syntax_ below.
+
 * Right click on a file or directory in your file-manger and choose _adoc-note_
   in the context menu. See <<_integration_with_file_browser>>. 
 
@@ -117,6 +118,9 @@ This method also works in very restricted environments. The only rights you need
 is to be allowed to execute portable binaries and batch scripts. 
 You also need the permission to install the _Asciidoctor.js Live Preview_ plugin 
 in Chromium, Chrome or Firefox. 
+
+* Double-click the shortcut `adoc-note.bat` on your desktop. This will place
+a new note in your home directory. 
 
 * Right click on a file or directory in file explorer and choose _adoc-note_
   in the context menu. See <<_integration_with_file_browser>>. 
@@ -331,13 +335,11 @@ this note footnote:[This only works if you have not changed the original
 title in the meantime!]:
 
 
-[source,bash]
-  adoc-note 'Implementing the NIST Cybersecurity Framework.pdf'
-
-
-
 .adoc-edit invokation example
 image::adoc-edit.png[]
+
+[source,bash]
+  adoc-note 'Implementing the NIST Cybersecurity Framework.pdf'
 
 <<<
 
@@ -490,6 +492,10 @@ or `chromium` and you can specify the parameters these programs require.  Make
 sure that your editor does not fork when launched. If it does fork, the script
 will still work but when you quit, no asciidoc-title-filename sync will
 occur.  Outside the `CONFIGURATION SECTION` no changes should be necessary.
++
+WARNING: The environment variables `ADOC_EDITOR` or `ADOC_VIEWER` -when defined-
+have precedence over settings in the `CONFIGURATION SECTION` and will override
+them.  
 
 . Optional: integrate the scripts with your file-manager (see below).
 
@@ -517,30 +523,21 @@ https://github.com/getreu/asciidoctor-notetaking[getreu/asciidoctor-notetaking].
 . Copy the 3 files in a directory of your choice. In the following I call 
 this directory _BIN_DIR_. 
 
-. Edit `adoc-note.bat` and adjust the `BIN_DIR` variable to point to your
-_BIN_DIR_ directory. 
-+
-If you are working in a restricted environment where you do not have
-installation rights you might want to use portable editor and viewer programs. 
-In this case you can specify `VIEWER_DIR` and `EDITOR_DIR` in
-`adoc-note.bak`. They will extend your `PATH` variable.
-
-
 . Configuration: 
 +
-At the beginning of `adoc-note` you will find a section enclosed in the
+At the beginning of `adoc-note.bak` you will find a section enclosed in the
 commments `CONFIGURATION SECTION START` and `CONFIGURATION SECTION END`.  Here
-you can specify what editor you want to use, e.g. if you choose `firefox.exe` or
-`chromium.exe` and you can specify the parameters these programs require.  Do
-the same for the editor of your choice. Make sure that your editor does not fork
-when launched. If it does fork, the script will still work but when you quit, no
-asciidoc-title-filename sync will occur.  Outside the `CONFIGURATION SECTION` no
-changes should be necessary.
+you can specify what browser you want to use, e.g. if you choose `firefox.exe` or
+`chromium.exe` and you can specify the parameters these programs require.
+Do the same for the editor of your choice. Make sure that your editor does not
+fork when launched. If it does fork, the script will still work but when you
+quit, no asciidoc-title-filename sync will occur.  Outside the `CONFIGURATION
+SECTION` no changes should be necessary.
 
 . Create a shortcut to `adoc-note.bat` on your desktop, click on properties 
 and change the shortcut to _run minimize_.
 
-. Launch `adoc-note` by dragging a file or directory on the shortcut.
+. Launch `adoc-note Shortcut` by dragging a file or directory on the shortcut.
 
 === Integration with file browser
 
@@ -585,7 +582,8 @@ image::explorer2.png[scaledwidth=70%]
 
 
 
-. Browse to the location of `adoc-bak` and click _Open_ and _Ok_.
+. Click _Browse..._ then browse to your _BIN_DIR_ directory, select 
+`adoc-note.bak` and click _Open_ and later _Ok_.
 +
 image::explorer3.png[scaledwidth=70%]
 
@@ -610,7 +608,7 @@ include::bin/adoc-note[]
 === src/adoc-note.bat
 
 .Source code: adoc-note.bat
-[source,winbatch]
+[source,winbat]
 ----
 include::bin/adoc-note.bat[]
 ----
