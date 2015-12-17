@@ -1,7 +1,7 @@
 
 = Note taking with Asciidoctor
 Jens Getreu
-v2.0, 9.12.2015
+v2.2, 17.12.2015
 :numbered:
 :toc:
 :pagenums:
@@ -13,41 +13,53 @@ Markup languages like `Asciidoc` are perfectly suited for quick note taking.
 Type your notes with your favourite editor, view and browse them with
 `Chromium`, `Chrome` or `Firefox`.
 
-All you need is the `adoc-note` script and Chromium, Chrome or Firefox with the 
+All you need is the `adoc-note` script and Chromium, Chrome or Firefox with the
 https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia[Chrome
 Asciidoctor.js Live Preview] extension or the
-https://addons.mozilla.org/en-US/firefox/addon/asciidoctorjs-live-preview/[Firefox 
+https://addons.mozilla.org/en-US/firefox/addon/asciidoctorjs-live-preview/[Firefox
 Asciidoctor.js Live Preview] extension.
 
-
-The `adoc-note` script can operate in three modes depending on it's paramters: 
+`adoc-note` runs under Linux and Windows.footnote:[For Mac follow Linux
+instructions (not tested).] The  script operates in four modes depending on
+it's options (see <<_invoking_the_script>>):
 
 Create a new note::
-	Creates new context depending asciidoc note files.
+	Creates a new context depending asciidoc note file.
 
-Edit notes:: 
-	Launches an editor and live-previewer (Firefox, Chrome of Chromium).
+Edit notes::
+	Launches an editor.
 
-View notes:: Launches a live-previewer.
+View notes:: Launches a live-previewer (Firefox, Chrome of Chromium).
 
-The project is hosted on Github: 
-https://github.com/getreu/asciidoctor-notetaking[getreu/asciidoctor-notetaking]
+Sync filename:: Renames the filename to be in sync with the document's title.
 
-The program runs under Linux and Windows.footnote:[For Mac follow Linux
-instructions (not tested).]
+
+The project is hosted on Github:
+https://github.com/getreu/asciidoctor-notetaking[getreu/asciidoctor-notetaking].
+The project's webpage is on
+http://getreu.net/public/downloads/doc/asciidoctor-notetaking/[getreu.net].
+There you also find a
+http://getreu.net/public/downloads/doc/asciidoctor-notetaking/README.pdf[pdf
+rendition] of this document.
+
+
+.Quickstart
+
+. Read the installation guide for <<_linux>> or <<_windows>>.
+. Read about the 2 most common use cases <<_how_students_take_notes>>.
 
 <<<
 
 == How students take notes
 
-A fellow student still uses paper and pen. I ask her why and she replied 
+A fellow student still uses paper and pen. I ask her why and she replied
 "`I can better concentrate. My computer distracts me. I will do all other
 things, but not listening.`".
 
-This is certainly true. As I am concerned I am not good at logistics. For me 
+This is certainly true. As I am concerned I am not good at logistics. For me
 having all documents and notes in one little machine is a blessing.
 
-To illustrate how to work with `adoc-note` here my most common 
+To illustrate how to work with `adoc-note` here my most common
 workflows.
 
 === The lesson starts
@@ -102,28 +114,57 @@ image::workflow2-4.png[scaledwidth=40%]
 
 == Create a new note
 
-There are several ways to launch `adoc-note`. 
+There are several ways to launch `adoc-note`.
 
 Linux::
 * Launch the commands in shell as described the sections _Syntax_ below.
+
 * Right click on a file or directory in your file-manger and choose _adoc-note_
-  in the context menu. See <<_integration_with_file_browser>>. 
+  in the context menu. See <<_integration_with_file_browser>>.
 
 Windows::
-* Drag and drop a file or directory on the shortcut `adoc-note.bat` on your 
-desktop. 
+* Drag and drop a file or directory on the shortcut `adoc-note.bat` on your
+desktop.
 +
 This method also works in very restricted environments. The only rights you need
-is to be allowed to execute portable binaries and batch scripts. 
-You also need the permission to install the _Asciidoctor.js Live Preview_ plugin 
-in Chromium, Chrome or Firefox. 
+is to be allowed to execute portable binaries and batch scripts.
+You also need the permission to install the _Asciidoctor.js Live Preview_ plugin
+in Chromium, Chrome or Firefox.
+
+* Double-click the shortcut `adoc-note.bat` on your desktop. This will place
+a new note in your home directory.
 
 * Right click on a file or directory in file explorer and choose _adoc-note_
-  in the context menu. See <<_integration_with_file_browser>>. 
+  in the context menu. See <<_integration_with_file_browser>>.
+
+=== Invoking the script
+
+[source, bash]
+ adoc-note -h
+
+shows a short help text with available command line options:
+
+....
+/usr/local/bin/adoc-note creates, edits or views an asciidoc note.
+
+usage:
+
+   /usr/local/bin/adoc-note [-h][-ro|-so|-eo] | [<File.adoc>|<Dir>|<File>]
+
+<Dir>|<File>: directory where the new note file will be created
+(current directory if none).
+If <File> is given a new adoc note will be created next to that file.
+If <File.adoc> is given the file is edited.
+Filename of <File> is changed when not in sync with title.
+
+Options:
+-ro     Do not open editor, open viewer only.
+-eo     Do not open viewer, only new note or, sync filename and edit.
+-so     Do not open editor or viewer, only new note or sync filename.
+....
 
 
-
-=== Directory as parameter 
+=== Directory as parameter
 
 ==== Syntax
 
@@ -141,7 +182,7 @@ creates the following document:
 [source,asciidoc]
 ----
 = <dir> - Notes
-<loginname> 
+<loginname>
 v1.0, <date>
 :numbered:
 :toc!:
@@ -167,7 +208,7 @@ creates the following document:
 [source,asciidoc]
 ----
 = Lecture 1 - Notes
-johndoe 
+johndoe
 v1.0, 29.11.2015
 :numbered:
 :toc!:
@@ -185,7 +226,7 @@ v1.0, 29.11.2015
 
 It is also possible to invoke the script without options:
 
-[souce,bash]
+[source,bash]
  adoc-note
 
 The result is the same as above but the current working directory is used for
@@ -206,7 +247,7 @@ creates the following document:
 [source,asciidoc]
 ----
 = Lecture 1 - Notes
-johndoe 
+johndoe
 v1.0, 29.11.2015
 :numbered:
 :toc!:
@@ -216,7 +257,7 @@ v1.0, 29.11.2015
 ----
 ====
 
-<<<
+
 
 === Filename as parameter
 
@@ -227,7 +268,7 @@ For example I use this feature to note from where I have downloaded a .pdf.
 
 When invoke with a filename, no date stamp is prepended.
 
-[souce,bash]
+[source,bash]
  adoc-note <path>/<dir>/<filename>
 
 The new file will look like this:
@@ -241,7 +282,7 @@ The new file will look like this:
 [source,asciidoc]
 ----
 = <filename> - Notes
-<loginname> 
+<loginname>
 v1.0, <date>
 :numbered:
 :toc!:
@@ -256,7 +297,7 @@ With reference to file: link:++<filename>++[]
 ==== Example
 
 [source, bash]
- adoc-new-note 'doc/Implementing the NIST Cybersecurity Framework.pdf' 
+ adoc-new-note 'doc/Implementing the NIST Cybersecurity Framework.pdf'
 
 
 creates the following document:
@@ -281,7 +322,7 @@ With reference to file: link:++Implementing-the-NIST-Cybersecurity-Framework.pdf
 ----
 ====
 
-Before quitting the `adoc-note` script executes it's _editing-mode_. This opens 
+Before quitting the `adoc-note` script executes it's _editing-mode_. This opens
 in your editor the completed template (see example above) and a live-previewr
 showing the rendered asciidoc file:
 
@@ -302,10 +343,10 @@ image::example-filename.png[scaledwidth=70%]
   adoc-note <path>/<filename>.adoc
 
 launches the the `gvim` editor by default. Replace `gvim` by any editor of your
-choice. At the same time a `chrome` or `chromium` window will pop up 
+choice. At the same time a `chrome` or `chromium` window will pop up
 showing the live rendition of your asciidoc file. You need to have the
 https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia[Asciidoctor.js
-Live Preview] extension installed. 
+Live Preview] extension installed.
 
 You may want to use some autosave editor feature in order to observe changes
 immediately in the rendered preview live.
@@ -321,23 +362,20 @@ details.
 NOTE: You can disable the title-filename-sync feature by adding a blank line at
 the beginning of the asciidoc document.
 
-=== Example 
+=== Example
 
 [source,bash]
   adoc-note 'Implementing the NIST Cybersecurity Framework.pdf - Notes.adoc'
 
-The same result is obtained by repeating the same command you used to create
-this note footnote:[This only works if you have not changed the original 
-title in the meantime!]:
+.adoc-edit invokation example
+image::adoc-edit.png[]
 
+The same result is obtained by repeating the same command you used to create
+this note footnote:[This only works if you have not changed the original
+title in the meantime!]:
 
 [source,bash]
   adoc-note 'Implementing the NIST Cybersecurity Framework.pdf'
-
-
-
-.adoc-edit invokation example
-image::adoc-edit.png[]
 
 <<<
 
@@ -352,14 +390,14 @@ image::adoc-edit.png[]
 [source,bash]
   adoc-note -ro <path>/<filename>.adoc
 
-launches `firefox` or `chromium`.  You need to have the 
+launches `firefox` or `chromium`.  You need to have the
 https://addons.mozilla.org/en-US/firefox/addon/asciidoctorjs-live-preview/[Firefox Asciidoctor.js
 Live Preview] extension or the
 https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia[Chrome
 Asciidoctor.js Live Preview] extension installed.
 
 
-=== Example 
+=== Example
 
 [source,bash]
   adoc-note -ro 'Implementing the NIST Cybersecurity Framework.pdf - Notes.adoc'
@@ -382,9 +420,9 @@ The filename has 3 parts:
 
    <order mark>-<simplified-title>--<simplified-subtitle>.adoc
 
-A `<order mark>` can be a 
+A `<order mark>` can be a
 
-* _chronological order mark_ or 
+* _chronological order mark_ or
 +
 .Chronological order marks
 ====
@@ -393,7 +431,7 @@ A `<order mark>` can be a
 ====
 
 
-* _a sequence number order mark_. 
+* _a sequence number order mark_.
 +
 .Sequence number order marks
 ====
@@ -402,7 +440,7 @@ A `<order mark>` can be a
 	09_02-
 ====
 
-`<order mark>` can be any combination of `0123456789-_`.  
+`<order mark>` can be any combination of `0123456789-_`.
 
 When `adoc-note` creates a new note based on a directory it prepends a
 _chronological order mark_ of today. The `<simplified-title>` part is derived
@@ -426,25 +464,28 @@ NOTE: The parent directory's order mark is never used to compose a filename for
 a new note.
 ====
 
-When `adoc-note` creates a new note based on a filename no 
+When `adoc-note` creates a new note based on a filename no
 _order mark_ is prepended.
 
-Before and after editing the `adoc-note` analyses the title and subtitle 
+Before and after editing the `adoc-note` analyses the title and subtitle
 of the asciidoc file and simplifies them in a filesystem friendly form.
 If the result does not equal to `<simplified-title>--<simplified-subtitle>`
 the filename is changed on disk. Possible _order marks_ remain untouched.
 
 
-NOTE: You can disable this feature by inserting a blank line at the beginning 
+NOTE: You can disable this feature by inserting a blank line at the beginning
 of the asciidoc file.
 
 IMPORTANT: `adoc-note` might change the note's filename but never changes an
 _order mark_!
-  
 
-For details about how an Asciidoc title line is simplified into 
-a `<simplified-title>--<simplified-subtitle>` string refer to the 
+
+For details about how an Asciidoc title line is simplified into
+a `<simplified-title>--<simplified-subtitle>` string refer to the
 `SanitizeFilename()` function in <<_src_adoc_note>>.
+
+
+
 
 <<<
 == Installation and configuration
@@ -456,7 +497,7 @@ a `<simplified-title>--<simplified-subtitle>` string refer to the
 refresh automatically and can be launched in application interface mode. My
 preferred choice.]
 
-. Install the 
+. Install the
 https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia[Chrome
 Asciidoctor.js Live Preview ]
 extension.  (Or
@@ -467,31 +508,45 @@ Asciidoctor.js Live Preview] )
 https://github.com/getreu/asciidoctor-notetaking[getreu/asciidoctor-notetaking].
   Alternatively you can copy and paste the listing at end of this document.
 
-. Copy them in a location of your `$PATH` and make them executable for everyone.
+. Copy it in a location of your `$PATH` and make it executable for everyone.
 +
-[sourace,bash]
-  sudo cp ./adoc-note /usr/local/bin
+[source,bash]
+  sudo cp adoc-note /usr/local/bin
   sudo chmod a+rx /usr/local/bin/adoc-note
 
 . Install some helper packages (most should be already on your system)
 footnote:[`uni2ascii` is only needed for `chrome` and `chromium`].
 +
-[sourace,bash]
-  sudo apt-get install dirname basename readlink sed uni2ascii vim-gtk
+[source,bash]
+  sudo apt-get install dirname basename sed uni2ascii vim-gtk
 +
-Replace `vim-gtk` with an editor of your choice. Configure `adoc-note` 
+Replace `vim-gtk` with an editor of your choice. Configure `adoc-note`
 accordingly.
 
 . Configuration: +
 At the beginning of `adoc-note` you will find a section enclosed in the
-commments `CONFIGURATION SECTION START` and `CONFIGURATION SECTION END`.  Here
-you can specify what editor you want to use, if you choose `firefox`, `chrome`
-or `chromium` and you can specify the parameters these programs require.  Make
-sure that your editor does not fork when launched. If it does fork, the script
-will still work but when you quit, no asciidoc-title-filename sync will
-occur.  Outside the `CONFIGURATION SECTION` no changes should be necessary.
+commments `CONFIGURATION SECTION START` and `CONFIGURATION SECTION END`.
++
+NOTE: The only file you edit to change the default choices for _editor_ and
+_viewer_ under Linux is `adco-note`. *Not* `adoc-note.bak`!
++
+Here you can specify what editor you want to use, if you choose `firefox`,
+`chrome` or `chromium` and you can specify the parameters these programs
+require.  Make sure that your editor does not fork when launched. If it does
+fork, the script will still work but when you quit, no asciidoc-title-filename
+sync will occur.  Outside the `CONFIGURATION SECTION` no changes should be
+necessary.
++
+WARNING: The environment variables `ADOC_EDITOR` or `ADOC_VIEWER` -when defined-
+have precedence over settings in the `CONFIGURATION SECTION` and will override
+them.
 
-. Optional: integrate the scripts with your file-manager (see below).
+. Test the installation: open a console window and type
+`adoc-note`.  An _editor_ and _viewer_ window containing a note template should
+open.
+
+. Optional: integrate the scripts with your file-manager (see
+<<_linux_file_manager_configuration>>).
 
 === Windows
 
@@ -500,7 +555,7 @@ occur.  Outside the `CONFIGURATION SECTION` no changes should be necessary.
 refresh automatically and can be launched in application interface mode. My
 preferred choice.]
 
-. Install the 
+. Install the
 https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia[Chrome
 Asciidoctor.js Live Preview ]
 extension.  (Or
@@ -514,44 +569,54 @@ https://github.com/getreu/asciidoctor-notetaking[getreu/asciidoctor-notetaking].
   The version of `busybox` in the above repository is probably outdated.
   Please get a newer version from here: http://frippery.org/busybox/
 
-. Copy the 3 files in a directory of your choice. In the following I call 
-this directory _BIN_DIR_. 
+. Copy the 3 files in a directory of your choice. In the following I call
+this directory _BIN_DIR_.
 
-. Edit `adoc-note.bat` and adjust the `BIN_DIR` variable to point to your
-_BIN_DIR_ directory. 
+. Configuration:
 +
-If you are working in a restricted environment where you do not have
-installation rights you might want to use portable editor and viewer programs. 
-In this case you can specify `VIEWER_DIR` and `EDITOR_DIR` in
-`adoc-note.bak`. They will extend your `PATH` variable.
-
-
-. Configuration: 
+At the beginning of `adoc-note.bak` you will find a section enclosed in the
+commments `CONFIGURATION SECTION START` and `CONFIGURATION SECTION END`.
 +
-At the beginning of `adoc-note` you will find a section enclosed in the
-commments `CONFIGURATION SECTION START` and `CONFIGURATION SECTION END`.  Here
-you can specify what editor you want to use, e.g. if you choose `firefox.exe` or
-`chromium.exe` and you can specify the parameters these programs require.  Do
-the same for the editor of your choice. Make sure that your editor does not fork
-when launched. If it does fork, the script will still work but when you quit, no
-asciidoc-title-filename sync will occur.  Outside the `CONFIGURATION SECTION` no
-changes should be necessary.
+NOTE: The only file you edit to change the default choices for _editor_ and
+_viewer_ under Windows is `adco-note.bat`. *Not* `adoc-note`!
++
+IMPORTANT: _Editor_ and _viewer_ should be configured to use your default
+windows codepage.
++
+Here you can specify what browser you want to use, e.g. if you choose
+`firefox.exe` or `chromium.exe` and you can specify the parameters these
+programs require.  Do the same for the editor of your choice. Make sure that
+your editor does not fork when launched. If it does fork, the script will still
+work but when you quit, no asciidoc-title-filename sync will occur.  Outside the
+`CONFIGURATION SECTION` no changes should be necessary.
 
-. Create a shortcut to `adoc-note.bat` on your desktop, click on properties 
-and change the shortcut to _run minimize_.
+. Create a shortcut to `adoc-note.bat` on your desktop, click on properties
+and change the shortcut to _run minimized_. Let the _start in_ path empty.
++
+image::shortcut-properties.png[]
 
-. Launch `adoc-note` by dragging a file or directory on the shortcut.
+
+. Test the installation: drag a file or directory on the `adoc-note Shortcut`
+on your desktop. An _editor_ and _viewer_ window should open.
+
+. Optional: integrate the scripts with your file-manager (see
+<<_windows_file_explorer_configuration>>).
+
+
+
+
+
 
 === Integration with file browser
 
-`adoc-note` integrates easily with your favorite file browser. 
+`adoc-note` integrates easily with your favorite file browser.
 
 
-==== Linux
+==== Linux file manager configuration
 
 The example below shows the _Thunar_ filebrowser's custom actions.
 
-.Integration with filemanager 
+.Integration with filemanager
 image::file-manager.png[]
 
 
@@ -568,7 +633,7 @@ image::edit_action.png[scaledwidth=60%]
 image::appearance-condition.png[scaledwidth=60%]
 
 <<<
-==== Windows
+==== Windows file explorer configuration
 
 . Open a folder containing an `.adoc` file.
 
@@ -585,13 +650,16 @@ image::explorer2.png[scaledwidth=70%]
 
 
 
-. Browse to the location of `adoc-bak` and click _Open_ and _Ok_.
+. Click _Browse..._ then browse to your _BIN_DIR_ directory, select
+`adoc-note.bak` and click _Open_ and later _Ok_.
 +
 image::explorer3.png[scaledwidth=70%]
 
 .More information
-* http://windows.microsoft.com/en-us/windows/change-file-open-program#1TC=windows-7[Change the program that opens a type of file]
-* http://www.howtogeek.com/107965/how-to-add-any-application-shortcut-to-windows-explorers-context-menu/[How to Add Any Application Shortcut to Windows Explorer’s Context Menu].
+* http://windows.microsoft.com/en-us/windows/change-file-open-program#1TC=windows-7[
+Change the program that opens a type of file]
+* http://www.howtogeek.com/107965/how-to-add-any-application-shortcut-to-windows-explorers-context-menu/[
+How to Add Any Application Shortcut to Windows Explorer’s Context Menu].
 
 
 
@@ -610,7 +678,7 @@ include::bin/adoc-note[]
 === src/adoc-note.bat
 
 .Source code: adoc-note.bat
-[source,winbatch]
+[source,winbat]
 ----
 include::bin/adoc-note.bat[]
 ----

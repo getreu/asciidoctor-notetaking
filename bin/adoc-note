@@ -1,38 +1,43 @@
 #!/bin/sh
 # Author: Jens Getreu
-# 5.12.2015
+# 17.12.2015
 # license: MIT
 
 ### CONFIGURATION SECTION START
 
 LaunchViewer () {
-	# Note: we need & in this function!
+	# WARNING: if the environment variable ADOC_VIEWER is defined
+	# the following code is never executed!
+	
+	# Note: we need & at the end of the line!
 	# Uncomment one line only!
-
 	# Chromium Asciidoctor-plugin follows your changes without "reload".
-	chromium "file:///$1" &
-	# Alternative: 
+	#chromium "file:///$1" &
+	# Alternative:
 	#chrome "file:///$1" &
 	# Extra package needed for this example: apt-get install uni2ascii
 	#chromium "--app=file:$(echo "$1"|uni2ascii -aJ)" &
 	# Press "reload current page" in firefox to see your changes.
-	#firefox  "file:///$1" &
+	firefox  "file:///$1" &
+	# If your editor has an integrated viewer (like Atom)
+	# do not uncomment any line above, but we need this:
+	return 0
 }
 
 LaunchEditor () {
+	# WARNING: if the environment variable ADOC_EDITOR is defined
+	# the following code is never executed!
+
 	# Note there is no & in this function. The editor should not fork!
 	# Uncomment one line only!
 
 	# Very simple Linux editor.
 	leafpad "$1"
-	# Under Windows try this first:
-	#notepad "$1"
 	# Linux geany. Optional: enable autosave in geany's save plugin.
-	#geany "$1" 
-	# Alternatively launch gvim this way under Linux and Windows.
-	#gvim --nofork "$1" 
-	# Does --nofork work under windows?
-	#gVimPortable --nofork "$1"
+	#geany "$1"
+	# Alternatively run gvim.
+	#gvim --nofork "$1"
+	return 0
 }
 
 ### CONFIGURATION SECTION END
@@ -55,40 +60,58 @@ Main () {
 	if  [ "-h" = "$1" ]; then
 		echo "\n${0} creates, edits or views an asciidoc note."
 		echo "\nusage:"
-		echo "\n   $_ [-h] | [ [-ro] <File.adoc> | <Dir> | <File> ]"
-		echo "\n<Dir>|<File>: directory where the new note file will be created."
-		echo "(Current directory if none)."
+		echo "\n   $_ [-h][-ro|-so|-eo] | [<File.adoc>|<Dir>|<File>]"
+		echo "\n<Dir>|<File>: directory where the new note file will be created"
+		echo "(current directory if none)."
 		echo "If <File> is given a new adoc note will be created next to that file."
-		echo "If <File.adoc> is given the file is edited or viewed [-ro]."
+		echo "If <File.adoc> is given the file is edited."
+		echo "Filename of <File> is changed when not in sync with title."
+		echo "\nOptions:"
+		echo "-ro\tDo not open editor, open viewer only."
+		echo "-eo\tDo not open viewer, only new note or, sync filename and edit."
+		echo "-so\tDo not open editor or viewer, only new note or sync filename."
 		exit 0
-	elif  [ "-ro" = "$1" ]; then
-		if [ -n "$2" ] && [ -f "$2" ] ; then 
-			Readlink "$2"
-			AdocView "$Readlink"
-		else
-			echo "Error: Can not open $2 for viewing." >&2
-			exit 1
-		fi
-		echo "$AdocView"
-		exit 0
-	# If file extension is .adoc then edit file.
-	elif [ -n "$1" ] && \
-		 [ $(echo "$1"|awk -F . '{print $NF}') = "adoc" ]  ; then
-		if [ -f "$1" ] ; then 
-			Readlink "$1"
-			AdocEdit "$Readlink"
-		else
-			echo "Error: Can not open $1 for editing." >&2
-			exit 1
-		fi
-		echo "$AdocEdit"
-		exit 0
-	else 
+	fi
+
+	local Path
+	local Option
+	if  [ "-ro" = "$1" ] || [ "-so" = "$1" ] || [ "-eo" = "$1" ] ; then
+		Option="$1"
+		Readlink "$2"
+	else
+		Option=""
 		Readlink "$1"
-		AdocNewNote "$Readlink"  || exit 1
-		AdocEdit "$AdocNewNote"
-		echo "$AdocEdit"
+	fi
+	Path="$Readlink"
+
+
+	# If file extension is not .adoc then create a new note.
+	if [ ! -n "$Path" ] || \
+	 [ !  $(echo "$Path"|awk -F . '{print $NF}') = "adoc" ]  ; then
+		AdocNewNote "$Path"  || exit 1
+		Path="$AdocNewNote"
+	fi
+
+	if [ -f "$Path" ] ; then
+		if  [ ! "-ro" = "$Option" ] ; then
+			SyncFilename "$Path"
+			Path="$SyncFilename"
+		fi
+		if  [ ! "-eo" = "$Option" ] && \
+		    [ ! "-so" = "$Option" ] ; then
+			AdocView "$Path"
+		fi
+		if  [ ! "-ro" = "$Option" ] && \
+		    [ ! "-so" = "$Option" ] ; then
+			AdocEdit "$Path"
+			SyncFilename "$AdocEdit"
+			Path="$SyncFilename"
+		fi
+		echo "$Path"
 		exit 0
+	else
+		echo "Error: Can not open '$Path'." >&2
+		exit 1
 	fi
 }
 
@@ -114,17 +137,17 @@ SanitizeFilename () {
 		sed -e  's/:[[:blank:]]*$//g; s/\(.*\):\(.*\)/\1--\2/g'| \
 		tr -s ':\\/|?~,;='   '_'| \
 		tr -s '<>:"\\/|?*<>#%{}|\^~[]+,;=[]`[:blank:]'    ' '| \
-		sed -e 's/[^[:alpha:]]*\(.*\)/\1/g;   s/[[:blank:]_]*$//g' \
-			-e 's/[[:blank:]_]*--[[:blank:]_]*/--/g' 
- 		)" 
+		sed -e 's/[[:blank:]_]*\(.*\)/\1/g; s/[[:blank:]_]*$//g' \
+			-e 's/[[:blank:]_]*--[[:blank:]_]*/--/g'
+ 		)"
 }
 
 
-ChangeFilename () {
+SyncFilename () {
 	# Pathname of the asciidoc-file
 	local Path
 	Path="$1"
- 
+
 	# Change filename according to the title in the
 	# first line of the .adoc file.
 	
@@ -133,7 +156,8 @@ ChangeFilename () {
 	FirstLine="$(head -n 1 "$Path")" || exit 1
 	local Title
 	Title=$(echo "$FirstLine" | \
-			sed -e 's/[^=]*=[[:blank:]]*\(.*\)/\1/' )
+			sed -e 's/[^=]*=[[:blank:]]*\(.*\)/\1/'  \
+			    -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')
 
 	# A title was found when Title <> FirstLine
 	if [ ! "$FirstLine" = "$Title" ] ; then
@@ -147,12 +171,11 @@ ChangeFilename () {
 		BaseName=$(basename "$Path")
 		local LeadingNumbers
 		LeadingNumbers=$(echo "$BaseName" | \
-			sed -e 's/^\([[:digit:]_-]\+-\).*/\1/' \
-					)
+			sed -e 's/\([[:digit:]_-]*\)\(.*\)/\1/')
 		# if no leading numbers found the following equals
 		if [ "$BaseName" = "$LeadingNumbers" ] ; then
 			LeadingNumbers="" #no leading no. found
-		fi 
+		fi
 
 		# Substitute special chars with _
 		SanitizeFilename "$Title"
@@ -163,11 +186,11 @@ ChangeFilename () {
 		DirName=$(dirname "$Path")
 		local NewPath="${DirName}/${LeadingNumbers}${FileTitle}.adoc"
 		mv -n "$Path" "$NewPath" >/dev/null 2>&1
-		Path="$NewPath" 
+		Path="$NewPath"
 	fi
 
 	# Return global variable
-	ChangeFilename="$Path"
+	SyncFilename="$Path"
 }
 
 
@@ -190,7 +213,8 @@ AdocNewNote () {
 		Basename=$(basename "$1")
 		DocRef=""
 		# omit leading numbers, "-" and "_"
-		Basename=$(echo "$Basename"|sed -e 's/^[[:digit:]_-]\+-\(.*\)/\1/')
+		Basename=$(echo "$Basename"| \
+			sed -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')
 		Basename="$Basename - Notes"
 		SanitizeFilename "$Basename"
 		NewFileName="$Dir/$(date +%Y%m%d)-${SanitizeFilename}.adoc"
@@ -199,7 +223,8 @@ AdocNewNote () {
 		Basename=$(basename "$Dir")
 		DocRef=""
 		# omit leading numbers, "-" and "_"
-		Basename=$(echo "$Basename"|sed -e 's/^[[:digit:]_-]\+-\(.*\)/\1/')
+		Basename=$(echo "$Basename"| \
+			sed -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')
 		Basename="$Basename - Notes"
 		SanitizeFilename "$Basename"
 		NewFileName="$Dir/$(date +%Y%m%d)-${SanitizeFilename}.adoc"
@@ -235,30 +260,26 @@ $DocRef
 
 
 AdocEdit () {
-	# Pathname of the asciidoc-file is in $1
-	ChangeFilename "$1" || exit 1
-	local Path
-	Path="$ChangeFilename"
-	LaunchViewer "$Path"
-
-	LaunchEditor "$Path"
-
-	# The code is only reached late enough when the editor does not fork.
-	# If it does fork then the following has no effect.
-	# Reflect a possible change in the .adoc title:
-	ChangeFilename "$Path" || exit 1
-	Path="$ChangeFilename"
-	
-	# return global variable
-	AdocEdit="$Path"
+	AdocEdit="$1"
+	if [ -n "$ADOC_EDITOR" ]; then
+		"$ADOC_EDITOR" "$AdocEdit"
+	else
+		LaunchEditor "$AdocEdit"
+	fi
+	# Return global variable AdocEdit
 }
 
 
 
 
 AdocView () {
-	LaunchViewer "$1"
 	AdocView="$1"
+	if [ -n "$ADOC_VIEWER" ]; then
+		"$ADOC_VIEWER" "$ADOC_VIEWER_OPT$AdocView" &
+	else
+		LaunchViewer "$AdocView"
+	fi
+	# Return global variable AdocView
 }
 
 
