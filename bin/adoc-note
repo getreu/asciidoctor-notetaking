@@ -87,7 +87,7 @@ Main () {
 
 	# If file extension is not .adoc then create a new note.
 	if [ ! -n "$Path" ] || \
-	 [ !  $(echo "$Path"|awk -F . '{print $NF}') = "adoc" ]  ; then
+	 [ !  "$(echo "$Path"|awk -F . '{print $NF}')" = "adoc" ]  ; then
 		AdocNewNote "$Path"  || exit 1
 		Path="$AdocNewNote"
 	fi
@@ -155,9 +155,8 @@ SyncFilename () {
 	local FirstLine
 	FirstLine="$(head -n 1 "$Path")" || exit 1
 	local Title
-	Title=$(echo "$FirstLine" | \
-			sed -e 's/[^=]*=[[:blank:]]*\(.*\)/\1/'  \
-			    -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')
+	Title="$(echo "$FirstLine" | \
+			sed -e 's/[^=]*=[[:blank:]]*\(.*\)/\1/')" 
 
 	# A title was found when Title <> FirstLine
 	if [ ! "$FirstLine" = "$Title" ] ; then
@@ -168,10 +167,10 @@ SyncFilename () {
 		# example  "04-01_03-abstract.adoc" -> "04-01_03-"
 		# example  "hallo02-abstract.adoc" -> ""
 		local BaseName
-		BaseName=$(basename "$Path")
+		BaseName="$(basename "$Path")"
 		local LeadingNumbers
-		LeadingNumbers=$(echo "$BaseName" | \
-			sed -e 's/\([[:digit:]_-]*\)\(.*\)/\1/')
+		LeadingNumbers="$(echo "$BaseName" | \
+			sed -e 's/\([[:digit:]_-]*\)\(.*\)/\1/')"
 		# if no leading numbers found the following equals
 		if [ "$BaseName" = "$LeadingNumbers" ] ; then
 			LeadingNumbers="" #no leading no. found
@@ -179,11 +178,13 @@ SyncFilename () {
 
 		# Substitute special chars with _
 		SanitizeFilename "$Title"
-		local FileTitle="$SanitizeFilename"
+		local FileTitle
+		FileTitle="$(echo "$SanitizeFilename"|
+			    sed -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')"
 
 		# Construct new name
 		local DirName
-		DirName=$(dirname "$Path")
+		DirName="$(dirname "$Path")"
 		local NewPath="${DirName}/${LeadingNumbers}${FileTitle}.adoc"
 		mv -n "$Path" "$NewPath" >/dev/null 2>&1
 		Path="$NewPath"
@@ -210,21 +211,21 @@ AdocNewNote () {
 		NewFileName="$Dir/${SanitizeFilename}.adoc"
 	elif [ -n "$1" ] && [ -d "$1" ] ; then
 		Dir="$1"
-		Basename=$(basename "$1")
+		Basename="$(basename "$1")"
 		DocRef=""
 		# omit leading numbers, "-" and "_"
-		Basename=$(echo "$Basename"| \
-			sed -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')
+		Basename="$(echo "$Basename"| \
+			sed -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')"
 		Basename="$Basename - Notes"
 		SanitizeFilename "$Basename"
 		NewFileName="$Dir/$(date +%Y%m%d)-${SanitizeFilename}.adoc"
 	else
 		Dir="$(pwd)"
-		Basename=$(basename "$Dir")
+		Basename="$(basename "$Dir")"
 		DocRef=""
 		# omit leading numbers, "-" and "_"
-		Basename=$(echo "$Basename"| \
-			sed -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')
+		Basename="$(echo "$Basename"| \
+			sed -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')"
 		Basename="$Basename - Notes"
 		SanitizeFilename "$Basename"
 		NewFileName="$Dir/$(date +%Y%m%d)-${SanitizeFilename}.adoc"
