@@ -1,13 +1,24 @@
 
 = Note taking with Asciidoctor
 Jens Getreu
-v2.2, 17.12.2015
+v2.3, 2.1.2016
 :numbered:
 :toc:
 :pagenums:
 :imagesdir: images
 :source-highlighter: prettify
+:icons: font
 
+
+:y: icon:check[role="green"]
+:n: icon:times[role="red"]
+:c: icon:file-text-o[role="blue"]
+
+ifeval::["{backend}" == "docbook5"]
+:y:  Y
+:n:  N
+:c:  *
+endif::[]
 
 Markup languages like `Asciidoc` are perfectly suited for quick note taking.
 Type your notes with your favourite editor, view and browse them with
@@ -120,7 +131,7 @@ Linux::
 * Launch the commands in shell as described the sections _Syntax_ below.
 
 * Right click on a file or directory in your file-manger and choose _adoc-note_
-  in the context menu. See <<_integration_with_file_browser>>.
+  in the context menu. See <<_integration_with_file_manager>>.
 
 Windows::
 * Drag and drop a file or directory on the shortcut `adoc-note.bat` on your
@@ -132,10 +143,10 @@ You also need the permission to install the _Asciidoctor.js Live Preview_ plugin
 in Chromium, Chrome or Firefox.
 
 * Double-click the shortcut `adoc-note.bat` on your desktop. This will place
-a new note in your home directory.
+a new note on your desktop.
 
 * Right click on a file or directory in file explorer and choose _adoc-note_
-  in the context menu. See <<_integration_with_file_browser>>.
+  in the context menu. See <<_integration_with_file_manager>>.
 
 === Invoking the script
 
@@ -162,6 +173,22 @@ Options:
 -eo     Do not open viewer, only new note or, sync filename and edit.
 -so     Do not open editor or viewer, only new note or sync filename.
 ....
+
+.`adoc-note` options
+|===
+|Option | Create a new note | Launch editor | Launch viewer |  Sync title-filename 
+
+|_without_ | {y} {c} | {y} | {y} | {y}
+|`-ro`     | {y} {c} | {n} | {y} | {n}
+|`-eo`     | {y} {c} | {y} | {n} | {y}
+|`-so`     | {y} {c} | {n} | {n} | {y}
+|===
+
+.Lengend
+{y} =  yes +
+{n} =  no +
+{c} =  If a note with the same filename exists on disk already, no new note is 
+created.
 
 
 === Directory as parameter
@@ -490,6 +517,9 @@ a `<simplified-title>--<simplified-subtitle>` string refer to the
 <<<
 == Installation and configuration
 
+`adoc-note` runs on Linux and Windows. For Windows installation and 
+configuration see <<_windows>> below.
+
 === Linux
 
 . Install `chromium`  (alternatively you can use `chrome` or
@@ -607,16 +637,19 @@ on your desktop. An _editor_ and _viewer_ window should open.
 
 
 
-=== Integration with file browser
+=== Integration with file manager
 
-`adoc-note` integrates easily with your favorite file browser.
+`adoc-note` integrates easily with your favorite
+<<_linux_file_manager_configuration,file-manager under Linux>> 
+and
+<<_windows_file_explorer_configuration,Explorer under Windows>>.
 
 
 ==== Linux file manager configuration
 
 The example below shows the _Thunar_ filebrowser's custom actions.
 
-.Integration with filemanager
+.Integration with file-manager
 image::file-manager.png[]
 
 
