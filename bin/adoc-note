@@ -1,6 +1,6 @@
 #!/bin/sh
 # Author: Jens Getreu
-# 17.12.2015
+# 16.2.2016
 # license: MIT
 
 ### CONFIGURATION SECTION START
@@ -235,8 +235,8 @@ AdocNewNote () {
 
 	if  [ ! -e "$NewFileName" ] ; then
 
-		# Create new file according to template
-		echo "= $Basename
+        # Create new file according to template (with unicode BOM)
+        printf  "\357\273\277= $Basename
 $USER
 v1.0, $Datestr
 :numbered!:
