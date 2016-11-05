@@ -118,23 +118,21 @@ Main () {
 SanitizeFilename () {
 	# line 1:	tab -> space
 	# line 2:	Delete control characters.
-	# line 3:	last (delete if at line end)  : ->  --
-	# line 4:	:\\/|?~,;=   ->  _
-	# line 5:
+	# line 3:	:\\/|?~,;=   ->  _
+	# line 4:
 	#   Exclude NTFS critical characters:		<>:"\\/|?*
 	#   https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247%28v=vs.85%29.aspx
 	#   Exclude restricted in fat32:		+,;=[]
 	#   https://en.wikipedia.org/wiki/Filename#Reserved_characters_and_words
 	#   These are considered unsafe in URLs:	<>#%{}|\^~[]`
 	#   https://perishablepress.com/stop-using-unsafe-characters-in-urls/
-	# line 6: 	Strip all until the first alpha char at the beginning
+	# line 5: 	Strip all until the first alpha char at the beginning
 	# 		and all spaces and _ at the end of the line.
-	# line 7: 	Remove spaces and _ before and after --.
+	# line 6: 	Remove spaces and _ before and after --.
 	# Return global variable
 	SanitizeFilename="$(echo "$1"| \
 		tr -s '[:blank:]'   ' '| \
 		tr -d '[:cntrl:]' | \
-		sed -e  's/:[[:blank:]]*$//g; s/\(.*\):\(.*\)/\1--\2/g'| \
 		tr -s ':\\/|?~,;='   '_'| \
 		tr -s '<>:"\\/|?*<>#%{}|\^~[]+,;=[]`[:blank:]'    ' '| \
 		sed -e 's/[[:blank:]_]*\(.*\)/\1/g; s/[[:blank:]_]*$//g' \
@@ -155,8 +153,12 @@ SyncFilename () {
 	local FirstLine
 	FirstLine="$(head -n 1 "$Path")" || exit 1
 	local Title
+    # line 1: stream string
+    # line 2: omit BOM and =
+    # line 3: splitt title and subtitle, then concat with -- in between
 	Title="$(echo "$FirstLine" | \
-			sed -e 's/[^=]*=[[:blank:]]*\(.*\)/\1/')" 
+			sed -e 's/[^=]*=[[:blank:]]*\(.*\)/\1/' \
+		        -e 's/:[[:blank:]]*$//g; s/\(.*\):\(.*\)/\1--\2/g' )"
 
 	# A title was found when Title <> FirstLine
 	if [ ! "$FirstLine" = "$Title" ] ; then
