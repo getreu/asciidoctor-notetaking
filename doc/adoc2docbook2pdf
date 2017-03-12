@@ -1,0 +1,40 @@
+#!/bin/sh
+# Author: Jens Getreu
+
+
+
+render () {
+
+
+AdocBaseName=$(basename "$1" ".adoc")
+InDirName="$(dirname "$1")"
+OutDirName="$(dirname "$2")"
+mkdir -p "$OutDirName"
+PdfBaseName=$(basename "$2" ".pdf")
+XmlFileName="$OutDirName/$AdocBaseName.xml"
+PdfFileName="$OutDirName/$PdfBaseName.pdf"
+DownloadDir="$3"
+mkdir -p "$DownloadDir"
+
+
+echo asciidoctor -b docbook -r asciidoctor-diagram -r asciidoctor-bibtex -a data-uri!  -D "$OutDirName" "$1"
+asciidoctor -b docbook -r asciidoctor-diagram -a data-uri!  -D "$OutDirName" "$1"
+
+cp -r "$InDirName/images/" "$OutDirName"
+
+echo fopub -H  "$XmlFileName" 
+#fopub -t ./docbook-xsl  "$XmlFileName" && \
+fopub -H  "$XmlFileName" && \
+	rm  "$XmlFileName" && \
+    rm  -v -r "$OutDirName/images/" && \
+    rm  -v -r "$OutDirName/.asciidoctor/" && \
+    mv -v "$OutDirName/$AdocBaseName.pdf" "$OutDirName/$PdfBaseName.pdf" && \
+	mupdf "$PdfFileName" & 
+
+cd "$DownloadDir"
+ln -sf "../../../$PdfFileName" .
+}
+
+
+render "source/index.adoc" "build/pdf/asciidoctor-notetaking.pdf" \
+       "build/html/_downloads/"

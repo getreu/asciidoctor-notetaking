@@ -20,9 +20,13 @@ ifeval::["{backend}" == "docbook5"]
 :c:  *
 endif::[]
 
+// excerpt-begin
+
 Markup languages like `Asciidoc` are perfectly suited for fast note taking.
 Type your notes with your favourite editor, view and browse them with
 `Chromium`, `Chrome` or `Firefox`.
+
+// excerpt-end
 
 All you need is the `adoc-note` script and Chromium, Chrome or Firefox with the
 https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia[Chrome
@@ -48,9 +52,9 @@ Sync filename:: Renames the filename to be in sync with the document's title.
 The project is hosted on Github:
 https://github.com/getreu/asciidoctor-notetaking[getreu/asciidoctor-notetaking].
 The project's webpage is on
-http://getreu.net/public/downloads/doc/asciidoctor-notetaking/[getreu.net].
+http://blog.getreu.net/projects/asciidoctor-notetaking/[blog.getreu.net].
 There you also find a
-http://getreu.net/public/downloads/doc/asciidoctor-notetaking/README.pdf[pdf
+http://blog.getreu.net/_downloads/asciidoctor-notetaking.pdf[pdf
 rendition] of this document.
 
 
@@ -700,7 +704,7 @@ How to Add Any Application Shortcut to Windows Explorer’s Context Menu].
 .Source code: adoc-note
 [source,bash]
 ----
-include::bin/adoc-note[]
+include::../../bin/adoc-note[]
 ----
 
 === src/adoc-note.bat
@@ -708,5 +712,5 @@ include::bin/adoc-note[]
 .Source code: adoc-note.bat
 [source,winbat]
 ----
-include::bin/adoc-note.bat[]
+include::../../bin/adoc-note.bat[]
 ----
