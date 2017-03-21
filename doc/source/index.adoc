@@ -546,7 +546,7 @@ https://github.com/getreu/asciidoctor-notetaking[getreu/asciidoctor-notetaking].
 footnote:[`uni2ascii` is only needed for `chrome` and `chromium`].
 +
 [source,bash]
-  sudo apt-get install dirname basename sed uni2ascii vim-gtk
+  sudo apt-get install sed uni2ascii vim-gtk
 +
 Replace `vim-gtk` with an editor of your choice. Configure `adoc-note`
 accordingly.

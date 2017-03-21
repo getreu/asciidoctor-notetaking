@@ -13,8 +13,6 @@ mkdir -p "$OutDirName"
 PdfBaseName=$(basename "$2" ".pdf")
 XmlFileName="$OutDirName/$AdocBaseName.xml"
 PdfFileName="$OutDirName/$PdfBaseName.pdf"
-DownloadDir="$3"
-mkdir -p "$DownloadDir"
 
 
 echo asciidoctor -b docbook -r asciidoctor-diagram -r asciidoctor-bibtex -a data-uri!  -D "$OutDirName" "$1"
@@ -31,8 +29,6 @@ fopub -H  "$XmlFileName" && \
     mv -v "$OutDirName/$AdocBaseName.pdf" "$OutDirName/$PdfBaseName.pdf" && \
 	mupdf "$PdfFileName" & 
 
-cd "$DownloadDir"
-ln -sf "../../../$PdfFileName" .
 }
 
 
