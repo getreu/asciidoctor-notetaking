@@ -13,7 +13,7 @@ render () {
 BaseName=$(basename "$1" ".adoc")
 InDirName="$(dirname "$1")"
 OutDirName="./build/html"
-mkdir -p "$DirName"
+mkdir -p "$OutDirName"
 
 #asciidoctor -r asciidoctor-bibtex -r asciidoctor-diagram -b xhtml5 -D "$DirName" "$@"
 asciidoctor -r asciidoctor-diagram -b xhtml5 -D "$OutDirName" "$1"
