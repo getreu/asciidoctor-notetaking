@@ -448,35 +448,35 @@ Consider the following note file:
 
 The filename has 3 parts:
 
-   <order mark>-<simplified-title>--<simplified-subtitle>.adoc
+   <sort tag>-<simplified-title>--<simplified-subtitle>.adoc
 
-A `<order mark>` can be a
+A `<sort tag>` can be a
 
-* _chronological order mark_ or
+* _chronological sort tag_ or
 +
-.Chronological order marks
+.Chronological sort tags
 ====
 	20140211-
 	20151208-
 ====
 
 
-* _a sequence number order mark_.
+* _a sequence number sort tag_.
 +
-.Sequence number order marks
+.Sequence number sort tags
 ====
 	02-
 	08-
 	09_02-
 ====
 
-`<order mark>` can be any combination of `0123456789-_`.
+`<sort tag>` can be any combination of `0123456789-_`.
 
 When `adoc-note` creates a new note based on a directory it prepends a
-_chronological order mark_ of today. The `<simplified-title>` part is derived
-from the parent directory name omitting its own _order mark_.
+_chronological sort tag_ of today. The `<simplified-title>` part is derived
+from the parent directory name omitting its own _sort tag_.
 
-.New note in a directory with sequence number order mark
+.New note in a directory with sequence number sort tag
 ====
 image::filing-system1.png[scaledwidth=70%]
 
@@ -490,24 +490,24 @@ image::filing-system2.png[scaledwidth=40%]
 
   10-Mein Körper/20151209-Mein Körper--Notes.adoc
 
-NOTE: The parent directory's order mark is never used to compose a filename for
+NOTE: The parent directory's sort tag is never used to compose a filename for
 a new note.
 ====
 
 When `adoc-note` creates a new note based on a filename no
-_order mark_ is prepended.
+_sort tag_ is prepended.
 
 Before and after editing the `adoc-note` analyses the title and subtitle
 of the asciidoc file and simplifies them in a filesystem friendly form.
 If the result does not equal to `<simplified-title>--<simplified-subtitle>`
-the filename is changed on disk. Possible _order marks_ remain untouched.
+the filename is changed on disk. Possible _sort tags_ remain untouched.
 
 
 NOTE: You can disable this feature by inserting a blank line at the beginning
 of the asciidoc file.
 
 IMPORTANT: `adoc-note` might change the note's filename but never changes an
-_order mark_!
+_sort tag_!
 
 
 For details about how an Asciidoc title line is simplified into
