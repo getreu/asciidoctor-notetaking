@@ -613,9 +613,10 @@ commments `CONFIGURATION SECTION START` and `CONFIGURATION SECTION END`.
 NOTE: The only file you edit to change the default choices for _editor_ and
 _viewer_ under Windows is `adco-note.bat`. *Not* `adoc-note`!
 +
-IMPORTANT: New notes are created with an Unicode BOM indicating Unicode encoding.
-Do not use the `notepad` editor as it does not understand Unicode. Use
-`Wordpad` or and other modern Unicode editor instead.
+IMPORTANT: New notes are created with an Unicode BOM indicating Unicode
+encoding.  Do not use the `notepad` editor coming with Windows older then Vista.
+These old versions of `notepad` do not handle Unicode correctly. Use `Wordpad`
+or and other modern Unicode editor instead.
 +
 Here you can specify what browser you want to use, e.g. if you choose
 `firefox.exe` or `chromium.exe` and you can specify the parameters these

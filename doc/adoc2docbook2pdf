@@ -25,9 +25,9 @@ echo fopub -H  "$XmlFileName"
 fopub -H  "$XmlFileName" && \
 	rm  "$XmlFileName" && \
     rm  -v -r "$OutDirName/images/" && \
-    rm  -v -r "$OutDirName/.asciidoctor/" && \
-    mv -v "$OutDirName/$AdocBaseName.pdf" "$OutDirName/$PdfBaseName.pdf" && \
-	mupdf "$PdfFileName" & 
+    rm  -v -r "$OutDirName/.asciidoctor/" ; \
+    mv -v "$OutDirName/$AdocBaseName.pdf" "$OutDirName/$PdfBaseName.pdf" ; \
+	atril "$PdfFileName" & 
 
 }
 
