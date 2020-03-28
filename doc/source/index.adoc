@@ -29,9 +29,9 @@ Type your notes with your favourite editor, view and browse them with
 // excerpt-end
 
 IMPORTANT: This project is discontinued. Please use 
-http://blog.getreu.net/projects/pandoc-notetaking/[pandoc-notetaking]
-instead. The code of `pandoc-notetakting` is generic, works with most markup 
-languages and can optionally use http://pandoc.org[pandoc] as renderer. 
+http://blog.getreu.net/projects/tp-note/[tp-note]
+instead. The code of `tp-note` is more generic and works with all markup 
+languages.
 
 All you need is the `adoc-note` script and Chromium, Chrome or Firefox with the
 https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia[Chrome

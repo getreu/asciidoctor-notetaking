@@ -16,7 +16,7 @@ PdfFileName="$OutDirName/$PdfBaseName.pdf"
 
 
 echo asciidoctor -b docbook -r asciidoctor-diagram -r asciidoctor-bibtex -a data-uri!  -D "$OutDirName" "$1"
-asciidoctor -b docbook -r asciidoctor-diagram -a data-uri!  -D "$OutDirName" "$1"
+asciidoctor -b docbook -a data-uri!  -D "$OutDirName" "$1"
 
 cp -r "$InDirName/images/" "$OutDirName"
 
